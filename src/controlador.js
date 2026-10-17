@@ -1,14 +1,7 @@
-/**
- * CONTROLADOR · Notas del semestre                                       (PARTE 4 de la guía)
- *
- * SABE: traducir lo que hace el usuario (eventos de la Vista) en órdenes para el Modelo,
- *       y qué mostrar cuando el Modelo rechaza una orden.
- * NO SABE: HTML ni DOM (eso es de la Vista), ni las reglas del negocio (eso es del Modelo).
- *
- * Es "delgado": cada método hace tres cosas como máximo (leer → ordenar → reaccionar).
- */
-
 import { ErrorDeReglas } from './modelo.js';
+
+// La Vista entrega texto; el Modelo espera número o null (sin nota).
+const aNota = (texto) => (String(texto).trim() === '' ? null : Number(texto));
 
 export class NotasControlador {
   #modelo;
@@ -18,13 +11,34 @@ export class NotasControlador {
     this.#modelo = modelo;
     this.#vista = vista;
 
-    // TODO 4A: regístrate en la Vista (vista.alAgregar, vista.alEliminar, vista.alCalificar).
-    //          Cada manejador convierte los datos (la Vista entrega TEXTO; el Modelo espera números y null)
-    //          y le da la orden al Modelo.
+    // 4A: registrarse en la Vista
+    this.#vista.alAgregar(({ nombre, peso, nota }) => {
+      this.#intentar(
+        () => this.#modelo.agregar({ nombre, peso: Number(peso), nota: aNota(nota) }),
+        true,
+      );
+    });
+
+    this.#vista.alEliminar((id) => {
+      this.#intentar(() => this.#modelo.eliminar(id));
+    });
+
+    this.#vista.alCalificar((id, texto) => {
+      this.#intentar(() => this.#modelo.calificar(id, aNota(texto)));
+    });
   }
 
-  // TODO 4B: un método privado que ejecute una orden al Modelo y, si lanza un ErrorDeReglas, le pida a la Vista
-  //          que muestre el mensaje (y que se redibuje, para deshacer lo que el usuario escribió y el Modelo no aceptó).
-  //          Los errores que NO sean de reglas no se esconden: se vuelven a lanzar.
-  //          Si todo sale bien: limpia el error. Para "agregar", además limpia el formulario.
+  // 4B: ejecutar la orden y reaccionar
+  #intentar(orden, esAgregar = false) {
+    try {
+      orden();
+    } catch (error) {
+      if (!(error instanceof ErrorDeReglas)) throw error;
+      this.#vista.mostrarError(error.message);
+      this.#vista.render();
+      return;
+    }
+    this.#vista.limpiarError();
+    if (esAgregar) this.#vista.limpiarFormulario();
+  }
 }
