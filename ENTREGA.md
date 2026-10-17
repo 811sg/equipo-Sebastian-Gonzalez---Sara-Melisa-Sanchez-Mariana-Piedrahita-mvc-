@@ -191,7 +191,21 @@ Date:   Fri Oct 16 20:49:49 2026 -0500
 ## 6. Reflexión (Parte 6)
 
 1. En la versión espagueti, ¿qué tuviste que leer o tocar para entender dónde se decide si el estudiante aprobó? ¿Y en la versión MVC?
-2. ¿Por qué el Modelo **no** debe llamar a `alert()` ni a `document`? ¿Qué pasaría con las pruebas del Modelo si lo hiciera?
-3. El Modelo avisa de sus cambios sin saber quién escucha (Observer). ¿Qué ganamos con eso frente a que el Modelo llame directamente a `vista.render()`?
+
+   **R:** en el espagueti tocaba leer la función pintar(), que es la que arma el html, porque ahí adentro estaba el if que compara el acumulado con 3.0 escrito a mano, todo mezclado con los textos y las clases. en la versión mvc solo hay que mirar resumen() en modelo.js, que usa la constante NOTA_MINIMA. la vista no decide nada, solo muestra el texto que le toca según el estado.
+
+2. ¿Por qué el Modelo **no** debe llamar a alert() ni a document? ¿Qué pasaría con las pruebas del Modelo si lo hiciera?
+
+   **R:** porque el modelo es solo de datos y reglas, no sabe que existe una pantalla. si usara document o alert solo funcionaría dentro del navegador, y las pruebas del modelo corren con node sin navegador, entonces fallarían con "document is not defined". además la prueba de arquitectura "Modelo puro" lo detecta.
+
+3. El Modelo avisa de sus cambios sin saber quién escucha (Observer). ¿Qué ganamos con eso frente a que el Modelo llame directamente a vista.render()?
+
+   **R:** que el modelo no depende de ninguna vista. lo vimos en la parte 5B: agregamos el termómetro sin tocar modelo.js, solo se suscribió y ya. si el modelo llamara a vista.render() tocaría editarlo cada vez que se agrega una vista, y no se podría probar sin tener una vista creada.
+
 4. Elige un olor de MVC (controlador gordo, lógica en la Vista, Modelo que toca la pantalla, Modelo anémico) que te hubiera sido fácil cometer hoy. ¿Cuál y cómo lo evitaron?
+
+   **R:** el controlador gordo. cuando convertimos el texto del formulario a número era fácil aprovechar y validar ahí mismo que la nota esté entre 0 y 5 o que el peso no pase de 100. lo evitamos dejando que el controlador solo convierta el texto (y la nota vacía a null) y le pase la orden al modelo, que es el que valida y lanza ErrorDeReglas. el controlador solo atrapa el error y le pide a la vista que lo muestre.
+
 5. ¿Para qué tipo de aplicación **no** usarías MVC? Justifica con lo que viste en el laboratorio.
+
+   **R:** para algo muy pequeño que no va a cambiar, como un script que hace una sola cosa o una página con un botón. en el laboratorio el espagueti hacía todo en un solo archivo y el mvc necesitó cinco, así que para algo chiquito es más trabajo que beneficio. vale la pena cuando la app crece o cambia seguido, como en la parte 5 donde cada cambio tocó solo uno o dos archivos.
