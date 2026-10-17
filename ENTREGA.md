@@ -71,13 +71,30 @@ Dibuja (a mano y pega una foto, o con texto/Mermaid) el recorrido completo desde
 
 **Salida de `npm test`** (pega el final, donde dice cuántas pruebas pasan):
 
-```text
+```
+MODELO
+  ✓ A · Agregar y validar ......................... 11/11
+  ✓ B · Calificar y eliminar ...................... 7/7
+  ✓ C · Resumen ................................... 10/10
+  ✓ D · Observador y persistencia ................. 8/8
+  ✓ E · Parte 5A · Nombres únicos ................. 3/3
 
+ARQUITECTURA
+  ✓ Modelo puro ................................... 4/4
+  ✓ Vista pasiva .................................. 5/5
+  ✓ Controlador delgado ........................... 6/6
+
+✓ 54 de 54 pruebas pasan.
 ```
 
 **Salida de `npm run arquitectura`:**
 
-```text
+```ARQUITECTURA
+  ✓ Modelo puro ................................... 4/4
+  ✓ Vista pasiva .................................. 5/5
+  ✓ Controlador delgado ........................... 6/6
+
+✓ 15 de 15 pruebas pasan.
 
 ```
 
@@ -90,9 +107,40 @@ La idea: **cada cambio debía tocar solo las piezas que le corresponden**.
 
 | Cambio | Archivos que tocaste | ¿Era lo esperado? ¿Por qué? |
 |---|---|---|
-| 5A · Nombres únicos | | |
-| 5B · Segunda vista (termómetro) | | |
-| 5C · Otro almacén | | |
+| 5A · Nombres únicos | src/modelo.js | sí, porque no repetir nombres es una regla del negocio y las reglas viven en el modelo. la vista y el controlador no se tocaron y el error igual sale en pantalla |
+| 5B · Segunda vista (termómetro) | src/termometro-vista.js (nuevo) y src/main.js | sí, es otra forma de mostrar los mismos datos entonces es una vista nueva, y main.js solo la conecta. el modelo no cambió, solo avisa a quien esté suscrito |
+| 5C · Otro almacén | src/almacen.js y src/main.js | sí, solo cambió dónde se guardan los datos. el modelo no se tocó porque solo necesita que el almacén tenga cargar() y guardar() |
+
+"text 
+commit e5099bb319b23aa0569fea8e77fca88d0ac8906e (HEAD -> main, origin/main, origin/HEAD)
+Author: Mariana Piedrahita <mpiedrahita546@gmail.com>
+Date:   Fri Oct 16 21:11:38 2026 -0500
+
+    Parte 5C: Almacen de sesion
+
+ src/almacen.js | 22 ++++++++++++++++++++++
+ src/main.js    |  4 ++--
+ 2 files changed, 24 insertions(+), 2 deletions(-)
+
+commit dd12d5adce9662aa21e5bfbc6351d809ce46f5f4
+Author: Mariana Piedrahita <mpiedrahita546@gmail.com>
+Date:   Fri Oct 16 21:05:25 2026 -0500
+
+    Parte 5B: Termometro
+
+ src/main.js             |  2 ++
+ src/termometro-vista.js | 40 ++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 42 insertions(+)
+
+commit 111ed8ff69bd291c8921a26b689cfc45a308606f
+Author: Mariana Piedrahita <mpiedrahita546@gmail.com>
+Date:   Fri Oct 16 20:49:49 2026 -0500
+
+    Parte 5A: Nombres unicos
+
+ src/modelo.js | 2 ++
+ 1 file changed, 2 insertions(+)
+ "
 
 ## 6. Reflexión (Parte 6)
 
