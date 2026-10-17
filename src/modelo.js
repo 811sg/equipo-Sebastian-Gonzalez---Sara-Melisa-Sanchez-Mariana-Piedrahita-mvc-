@@ -52,6 +52,8 @@ export class NotasModelo {
     if (limpio.length > MAX_NOMBRE) {
       throw new ErrorDeReglas('El nombre no puede superar 40 caracteres.');
     }
+    const repetido = this.#evaluaciones.some((e) => e.nombre.toLowerCase() === limpio.toLowerCase());
+    if (repetido) throw new ErrorDeReglas('Ya existe una evaluación con ese nombre.');
     if (!Number.isFinite(peso) || peso < 1 || peso > 100) {
       throw new ErrorDeReglas('El peso debe estar entre 1 y 100.');
     }
