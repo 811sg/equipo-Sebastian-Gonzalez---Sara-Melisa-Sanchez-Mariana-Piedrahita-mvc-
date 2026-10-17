@@ -64,7 +64,49 @@ Dibuja (a mano y pega una foto, o con texto/Mermaid) el recorrido completo desde
 **Agregar** hasta que ve la fila nueva en la tabla. Marca en cada paso **el archivo y el método** que actúa.
 
 ```text
-(tu diagrama aquí)
+1. usuario: llena nombre, peso y nota y presiona Agregar (index.html, #form)
+        |
+        v
+2. src/vista.js · alAgregar()
+   escucha el submit, evita que la página se recargue y llama al manejador del controlador
+        |
+        v
+3. src/vista.js · leerFormulario()
+   devuelve { nombre, peso, nota } tal cual, como texto
+        |
+        v
+4. src/controlador.js · manejador de alAgregar (constructor)
+   convierte el peso con Number() y la nota con aNota() (vacía = null)
+        |
+        v
+5. src/controlador.js · #intentar(orden)
+   le da la orden al modelo: modelo.agregar({ nombre, peso, nota })
+        |
+        v
+6. src/modelo.js · agregar()
+   valida nombre, nombre repetido, peso, nota y que los pesos no pasen de 100
+   - si algo falla lanza ErrorDeReglas -> vuelve a #intentar -> vista.mostrarError() y vista.render()
+   - si todo esta bien agrega la evaluacion con su id nuevo
+        |
+        v
+7. src/modelo.js · #cambio()
+        |
+        +--> 8. src/almacen.js · AlmacenSesion.guardar()
+        |       guarda la lista en sessionStorage
+        |
+        +--> 9. avisa a los suscriptores (observer)
+                 |
+                 +--> 10. src/vista.js · render()
+                 |        redibuja la tabla con la fila nueva y el resumen
+                 |
+                 +--> 11. src/termometro-vista.js · render()
+                          mueve la barra y cambia la leyenda
+        |
+        v
+12. src/controlador.js · #intentar(orden)
+    como no hubo error: vista.limpiarError() y vista.limpiarFormulario()
+    -> el usuario ve la fila nueva y el formulario vacío
+
 ```
 
 ## 4. Evidencias (Partes 2, 3, 4 y 6)
