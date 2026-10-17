@@ -98,7 +98,11 @@ ARQUITECTURA
 
 ```
 
-**Captura de pantalla** de la app con las dos vistas (la tabla/resumen y el termómetro): _(pega la imagen o su enlace)_
+**Captura de pantalla** de la app con las dos vistas (la tabla/resumen y el termómetro):
+<img width="861" height="597" alt="image" src="https://github.com/user-attachments/assets/dabcd7a1-4039-4d46-9b75-35365b5a66b3" />
+<img width="499" height="102" alt="image" src="https://github.com/user-attachments/assets/89780777-74d1-4b0f-870d-1fcaa9ec904b" />
+
+
 
 ## 5. Tres cambios, tres lugares (Parte 5)
 
